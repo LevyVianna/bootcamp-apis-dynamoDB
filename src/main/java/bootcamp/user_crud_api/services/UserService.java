@@ -22,6 +22,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /*
     public User updateUser( User newUser) {
         Optional<User> userOptional = userRepository.findById(newUser.getUsername());
         if (userOptional.isPresent()) {
@@ -34,13 +35,18 @@ public class UserService {
         return null;
     }
 
+     */
+
     public User getUserByUsername(String username) {
         return userRepository.findById(username).orElse(null);
     }
 
+    /*
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+     */
 
     public boolean deleteUser(String username) {
         if (userRepository.existsById(username)) {

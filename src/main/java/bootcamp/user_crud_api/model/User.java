@@ -1,28 +1,15 @@
 package bootcamp.user_crud_api.model;
 
-import jakarta.persistence.*;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-@Entity
-@Table(name = "Users")
+@DynamoDBTable(tableName = "Users")
 public class User {
 
-    @Id
     private String username;
-    private String password;
     private String email;
-    private int age;
+    private String status;
 
-    public User() {
-    }
-
-    public User(String login, String password) {
-        this.username = login;
-        this.password = password;
-    }
-
+    @DynamoDBHashKey(attributeName = "username")
     public String getUsername() {
         return username;
     }
@@ -31,44 +18,21 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "username = " + username;
-    }
-
+    @DynamoDBAttribute(attributeName = "email")
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
-        if (isValidEmail(email)) {
-            this.email = email;
-        } else {
-            throw new IllegalArgumentException("Email invalido: " + email);
-        }
+        this.email = email;
     }
 
-    // Método para verificar se o email é válido
-    public boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+    @DynamoDBAttribute(attributeName = "status")
+    public String getStatus() {
+        return status;
     }
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

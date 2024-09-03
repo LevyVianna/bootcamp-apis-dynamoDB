@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     /////////////////////////////////
@@ -51,39 +49,6 @@ public class UserController {
         }catch (Exception e) {
             logger.warn("createUser(): tentou criar usuario ja existente: " + user.getUsername());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());  // HTTP 409
-        }
-    }
-
-    /////////////////////////////////
-    ////////////// PUT //////////////
-    /////////////////////////////////
-    // SWAGGER
-    @Operation(summary = "Atualiza usuario", method = "PUT")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "usuario atualizado!"),
-            @ApiResponse(responseCode = "400", description = "username nulo ou vazio"),
-            @ApiResponse(responseCode = "404", description = "usuario nao encontrado"),
-    })
-    // Endpoint
-    @PutMapping("/{username}")
-    public ResponseEntity<?> updateUser(@PathVariable String username, @RequestBody User user) {
-        if (user.getUsername() == null || user.getUsername().isEmpty()) {
-            logger.warn("updateUser(): username nulo no corpo da requisição");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username eh obrigatorio"); // HTTP 400
-        }
-
-        if (!username.equals(user.getUsername())) {
-            logger.warn("updateUser(): username na URL não corresponde ao username no corpo da requisição");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username na URL e no body precisam ser iguais"); // HTTP 400
-        }
-
-        User updatedUser = userService.updateUser(user);
-        if (updatedUser != null) {
-            logger.info("updateUser(): usuário atualizado");
-            return ResponseEntity.ok(updatedUser); // HTTP 200
-        } else {
-            logger.warn("updateUser(): usuário não encontrado");
-            return ResponseEntity.notFound().build(); // HTTP 404
         }
     }
 
