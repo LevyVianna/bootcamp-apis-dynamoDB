@@ -22,10 +22,12 @@ Considere dar uma “estrela“ ao projeto se você achar ele útil 😊!
     **OU**  
     Fazer download aqui: [ZIP](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.zip) ou [tar.gz](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.tar.gz)  
     Após download, executar os comandos:  
-. 	  unzip path_to_downloaded_zip  
+    ```
+ 	  unzip <<CAMINHO_DO_ZIP_MUDE_AQUI>>  
       cd dynamodb_local_latest  
       java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb  
-
+    ```
+   
 3. Instalar a AWS CLI (Command Line Interface):  
    (Não precisa criar conta na AWS)  
    https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html  
@@ -33,10 +35,10 @@ Considere dar uma “estrela“ ao projeto se você achar ele útil 😊!
 4. Cria a tabela Users e o EmailIndex (GSI) no dynamoDB - via AWS CLI  
    
     Criando a tabela Users:  
-     aws dynamodb create-table --table-name Users --attribute-definitions AttributeName=username,AttributeType=S --key-schema AttributeName=username,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000  
+    `aws dynamodb create-table --table-name Users --attribute-definitions AttributeName=username,AttributeType=S --key-schema AttributeName=username,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000`  
   
     Criando o GSI EmailIndex:  
-   aws dynamodb update-table --table-name Users --attribute-definitions AttributeName=email,AttributeType=S --global-secondary-index-updates "[{\"Create\":{\"IndexName\":\"EmailIndex\",\"KeySchema\":[{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"},\"ProvisionedThroughput\":{\"ReadCapacityUnits\":5,\"WriteCapacityUnits\":5}}}]" --endpoint-url http://localhost:8000  
+    `aws dynamodb update-table --table-name Users --attribute-definitions AttributeName=email,AttributeType=S --global-secondary-index-updates "[{\"Create\":{\"IndexName\":\"EmailIndex\",\"KeySchema\":[{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"},\"ProvisionedThroughput\":{\"ReadCapacityUnits\":5,\"WriteCapacityUnits\":5}}}]" --endpoint-url http://localhost:8000`  
   
 5. Instalar o dynamoDB-admin:  
    https://www.npmjs.com/package/dynamodb-admin  
