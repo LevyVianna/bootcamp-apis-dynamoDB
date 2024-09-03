@@ -1,28 +1,50 @@
 # **Projeto Bootcamp API Users**
 ![ ](https://hermes.dio.me/tracks/c90e7979-b807-4941-895a-8d85564b142e.png)
 
-Bem-vindo ao repositório do projeto API Users! 🎉 Estou empolgado em compartilhar com vocês esse projeto para o bootcamp “Coding the Future Claro Java Spring Boot” - https://web.dio.me/track/coding-the-future-claro-java-spring-boot . Este projeto foi desenvolvido com muito cuidado para servir como um recurso de aprendizado e um ponto de partida para explorarmos juntos boas práticas em desenvolvimento de software.
+Bem-vindo à continuação do projeto API Users! 🎉 Este repositório faz parte da segunda etapa da minha mentoria no [bootcamp Coding the Future Claro Java Spring Boot](https://web.dio.me/track/coding-the-future-claro-java-spring-boot). No primeiro repositório, exploramos boas práticas no desenvolvimento de APIs utilizando Spring Boot. Você pode conferir a primeira parte deste projeto [aqui] (https://github.com/LevyVianna/bootcamp-apis-springboot).
+
+Nesta segunda fase, demos um passo adiante e integramos o Amazon DynamoDB como banco de dados, utilizando uma instância local para facilitar o desenvolvimento e os testes, de forma que nao é necessário criar uma conta na AWS
+
 
 ## **Como utilizar esse projeto?**
 
-1. **Já tenho uma conta no GitHub**
+1. Caso tenha uma conta no GitHub, pode dar um fork nesse projeto.
+2. Caso não tenha, você pode clonar esse projeto com o comando: “git clone <https://github.com/LevyVianna/bootcamp-apis-dynamoDB.git”>
+3. Caso não tenha o git instalado na sua máquina, você pode fazer o dowload do projeto clicando no botão verde “Code“ e depois em “Download ZIP”
 
-- **Quero evoluir meu projeto a partir desse:** Nesse caso, dê um fork nesse projeto. Assim você poderá ampliar esse projeto no seu próprio GitHub, adicionando o seu próprio código, o que eu recomendo muito.
-- **Quero apenas acompanhar esse projeto:** Caso deseje apenas acompanhar a evolução desse projeto para as próximas monitorias, dê um watch, assim será informado sobre as novas alterações desse projeto.
 
-Considere dar uma “estrela“ ao projeto se você achar ele útil **😊**!
+## **Passo a passo para a instalação**
 
-2. **Não tenho um conta no GitHub**
+1. Baixar o projeto para o seu ambiente de trabalho em uma das opções anteriores 
+2. Baixar e instalar o dynamoDB local
+    Seguir os passos da [documentação aws aqui aqui] (https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) 
+    OU
+    Fazer download aqui: [ZIP](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.zip) ou [tar.gz](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.tar.gz)
+    Após download, executar os comandos:
+. 	  unzip path_to_downloaded_zip
+      cd dynamodb_local_latest
+      java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+3. Instalar a AWS CLI (Command Line Interface):
+   (Não precisa criar conta na AWS)
+   https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 
-Primeiramente, recomendo que crie sua conta no GitHub e siga uma das opções do item 1. Caso opte por não criar a conta no GitHub, você pode:
+4. Cria a tabela Users e o EmailIndex (GSI) no dynamoDB - via AWS CLI
+   
+    Criando a tabela Users:
+     aws dynamodb create-table --table-name Users --attribute-definitions AttributeName=username,AttributeType=S --key-schema AttributeName=username,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000
 
-- **Tenho o Git instalado em minha máquina:** clone este projeto com o comando:
+    Criando o GSI
+      aws dynamodb update-table --table-name Users --attribute-definitions AttributeName=email,AttributeType=S --global-secondary-index-updates "[{\"Create\":{\"IndexName\":\"EmailIndex\",\"KeySchema\":[{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"},\"ProvisionedThroughput\":{\"ReadCapacityUnits\":5,\"WriteCapacityUnits\":5}}}]" --endpoint-url http://localhost:8000
 
-“git clone <https://github.com/LevyVianna/bootcamp-apis-springboot.git”>
+5. Instalar o dynamoDB-admin:
+   https://www.npmjs.com/package/dynamodb-admin
 
-… e você poderá alterar esse código na sua IDE favorita.
+Após essas etapas você deve ser capaz de ver a tabela Users no DynamoDB Admin em:
+http://localhost:8001
 
-- **Não tenho o Git instalado em minha máquina:** você pode fazer o dowload do projeto clicando no botão verde “Code“ e depois em “Download ZIP”.
+## **Objetivo do Projeto**
+Este projeto, acompanhado pela apresentação realizada na live, tem como objetivo familiarizar desenvolvedores com o DynamoDB, um banco de dados NoSQL baseado em chave-valor. O foco principal é ensinar como utilizar esse banco de dados de forma eficiente, evitando o uso da operação SCAN, que pode gerar custos elevados. Em vez disso, o projeto demonstra como realizar consultas diretamente em um GSI (Índice Secundário Global) quando a chave primária da tabela não estiver disponível, otimizando o desempenho e reduzindo custos.
+
 
 ## **Stack Utilizado no Projeto**
 
@@ -30,52 +52,22 @@ Primeiramente, recomendo que crie sua conta no GitHub e siga uma das opções do
 
 Este projeto foi desenvolvido utilizando uma stack moderna e eficiente para criar uma API robusta e fácil de manter. Aqui estão as principais tecnologias e dependências utilizadas:
 
-- **Java 17**: A versão mais recente e estável do Java, garantindo performance e suporte a novas funcionalidades da linguagem.
-- **Spring Boot 3.3.2**: Framework poderoso que facilita o desenvolvimento de aplicações Java, oferecendo uma configuração mínima e integração com diversas tecnologias.
-- **Spring Data JPA**: Abstração do banco de dados, facilitando o acesso e a manipulação de dados com o uso de repositórios e a integração com o JPA (Java Persistence API).
-- **H2 Database**: Banco de dados em memória, ideal para desenvolvimento e testes rápidos, sem a necessidade de configurar um banco de dados externo.
-- **Spring Web**: Módulo do Spring Boot que facilita a criação de APIs RESTful, com suporte completo a padrões de mercado.
-- **Springdoc OpenAPI (Swagger 3.0)**: Ferramenta para geração automática de documentação da API, permitindo que os desenvolvedores entendam e testem os endpoints de forma interativa.
-- **Maven**: Ferramenta de build e gerenciamento de dependências, essencial para garantir que todas as bibliotecas e plugins estejam atualizados e configurados corretamente.
+- **Java 17**
+- **Spring Boot 3.3.2**
+- **DynamoDB Local**
+- **Spring Web**
+- **Springdoc OpenAPI (Swagger 3.0)**
+- **Maven**
 
-## **Dicas Úteis**
-
-- **Leia o arquivo pom.xml**: É fundamental entender as dependências e versões utilizadas no seu projeto. O arquivo pom.xml gerencia essas dependências e configurações do Maven, sendo o coração da sua aplicação em termos de build e integração.
-- **Verifique a versão do Java na sua IDE**: Caso esteja configurado em sua IDE uma versão anterior ao JDK 17, faça o download da JDK 17 (ou superior) em: <https://www.oracle.com/java/technologies/downloads/#jdk17-windows>
-
-... instale-o e mude para a JDK 17(ou superior) na sua IDE.
-
-Caso a JDK de sua IDE seja a 17 ou superior, o projeto deve compilar e rodar sem problemas.
-
-## **Arquitetura e Padrões**
-
-Neste projeto, implementamos uma API CRUD para gerenciamento de usuários. Para manter o código organizado e de fácil manutenção, seguimos os padrões:
-
-- **Controller**: Responsável por lidar com as requisições HTTP. Aqui, definimos os endpoints da API e delegamos a lógica para as camadas adequadas.
-- **Service**: Contém a lógica de negócio. O Service faz a ponte entre o Controller e o Repository, garantindo que todas as regras de negócio sejam aplicadas corretamente.
-- **Repository**: Cuida da comunicação com o banco de dados. Utilizando o Spring Data JPA, essa camada facilita as operações de persistência de dados.
-
-## **Objetivos do Projeto**
-
-Os principais objetivos deste projeto, juntamente com a monitoria, são:
-
-- **Fornecer uma base** para quem quer começar a trabalhar com APIs e microserviços em Java e Spring Boot.
-- **Demonstrar a importância de seguir padrões de mercado**, como **REST** (incluindo o uso correto de códigos de status HTTP, verbos HTTP e nomenclatura de APIs), a **documentação com OpenAPI 3.0**, e a **correta utilização de logs**.
 
 ### **Documentação OpenAPI (Swagger):**
 http://localhost:8080/swagger-ui/index.html#/
 
-### **H2 DB:**
-http://localhost:8080/h2-console/
-- **JDBC URL:** jdbc:h2:mem:testdb
-- **User Name:** as
-- **password:** password
+### **DynamoDB Admin Local:**
+http://localhost:8001
 
-Espero que este projeto possa servir como uma porta de entrada para sua jornada no desenvolvimento de APIs e microserviços!
 
 ## **Contato**
-
-Se precisar de ajuda ou quiser trocar uma ideia, sinta-se à vontade para me contatar:
 
 - [LinkedIn](https://www.linkedin.com/in/aws-cost-optimization-specialist/)
 - [Instagram](https://www.instagram.com/levy.vianna/)
