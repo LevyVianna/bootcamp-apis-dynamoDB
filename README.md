@@ -12,12 +12,13 @@ Nesta segunda fase, demos um passo adiante e integramos o Amazon DynamoDB como b
 2. Caso não tenha, você pode clonar esse projeto com o comando: “git clone <https://github.com/LevyVianna/bootcamp-apis-dynamoDB.git”>
 3. Caso não tenha o git instalado na sua máquina, você pode fazer o dowload do projeto clicando no botão verde “Code“ e depois em “Download ZIP”
 
+Considere dar uma “estrela“ ao projeto se você achar ele útil 😊!
 
 ## **Passo a passo para a instalação**
 
 1. Baixar o projeto para o seu ambiente de trabalho em uma das opções anteriores 
 2. Baixar e instalar o dynamoDB local
-    Seguir os passos da [documentação aws aqui aqui](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html)  
+    Seguir os passos da [documentação aws aqui](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html)  
     **OU**  
     Fazer download aqui: [ZIP](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.zip) ou [tar.gz](https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_latest.tar.gz)  
     Após download, executar os comandos:  
@@ -35,7 +36,7 @@ Nesta segunda fase, demos um passo adiante e integramos o Amazon DynamoDB como b
      aws dynamodb create-table --table-name Users --attribute-definitions AttributeName=username,AttributeType=S --key-schema AttributeName=username,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000  
   
     Criando o GSI EmailIndex:  
-      aws dynamodb update-table --table-name Users --attribute-definitions AttributeName=email,AttributeType=S --global-secondary-index-updates "[{\"Create\":{\"IndexName\":\"EmailIndex\",\"KeySchema\":[{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"},\"ProvisionedThroughput\":{\"ReadCapacityUnits\":5,\"WriteCapacityUnits\":5}}}]" --endpoint-url http://localhost:8000  
+   aws dynamodb update-table --table-name Users --attribute-definitions AttributeName=email,AttributeType=S --global-secondary-index-updates "[{\"Create\":{\"IndexName\":\"EmailIndex\",\"KeySchema\":[{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"},\"ProvisionedThroughput\":{\"ReadCapacityUnits\":5,\"WriteCapacityUnits\":5}}}]" --endpoint-url http://localhost:8000  
   
 5. Instalar o dynamoDB-admin:  
    https://www.npmjs.com/package/dynamodb-admin  
@@ -48,9 +49,9 @@ Este projeto, acompanhado pela apresentação realizada na live, tem como objeti
   
 ## **Stack Utilizado no Projeto**
   
-![ ](https://raw.githubusercontent.com/LevyVianna/bootcamp-apis-springboot/main/imgs/crud_USERS.png)  
+![ ](https://github.com/LevyVianna/bootcamp-apis-dynamoDB/blob/main/imgs/crud_USERS.png)  
   
-Este projeto foi desenvolvido utilizando uma stack moderna e eficiente para criar uma API robusta e fácil de manter. Aqui estão as principais tecnologias e dependências utilizadas:  
+Este projeto foi desenvolvido utilizando o seguinte stack:  
   
 - **Java 17**
 - **Spring Boot 3.3.2**
