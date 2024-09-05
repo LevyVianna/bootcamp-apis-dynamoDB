@@ -13,7 +13,6 @@ Nesta segunda fase, demos um passo adiante e integramos o Amazon DynamoDB como b
 3. Caso não tenha o git instalado na sua máquina, você pode fazer o dowload do projeto clicando no botão verde “Code“ e depois em “Download ZIP”
 
 Considere dar uma “estrela“ ao projeto se você achar ele útil 😊!
-
 ## **Passo a passo para a instalação**
 
 1. Baixar o projeto para o seu ambiente de trabalho em uma das opções anteriores 
@@ -35,10 +34,10 @@ Considere dar uma “estrela“ ao projeto se você achar ele útil 😊!
 4. Cria a tabela Users e o EmailIndex (GSI) no dynamoDB - via AWS CLI  
    
     Criando a tabela Users:  
-    `aws dynamodb create-table --table-name Users --attribute-definitions AttributeName=username,AttributeType=S --key-schema AttributeName=username,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000`  
+    ```aws dynamodb create-table --table-name Users --attribute-definitions AttributeName=username,AttributeType=S --key-schema AttributeName=username,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5 --endpoint-url http://localhost:8000```  
   
     Criando o GSI EmailIndex:  
-    `aws dynamodb update-table --table-name Users --attribute-definitions AttributeName=email,AttributeType=S --global-secondary-index-updates "[{\"Create\":{\"IndexName\":\"EmailIndex\",\"KeySchema\":[{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"},\"ProvisionedThroughput\":{\"ReadCapacityUnits\":5,\"WriteCapacityUnits\":5}}}]" --endpoint-url http://localhost:8000`  
+    ```aws dynamodb update-table --table-name Users --attribute-definitions AttributeName=email,AttributeType=S --global-secondary-index-updates "[{\"Create\":{\"IndexName\":\"EmailIndex\",\"KeySchema\":[{\"AttributeName\":\"email\",\"KeyType\":\"HASH\"}],\"Projection\":{\"ProjectionType\":\"ALL\"},\"ProvisionedThroughput\":{\"ReadCapacityUnits\":5,\"WriteCapacityUnits\":5}}}]" --endpoint-url http://localhost:8000```  
   
 5. Instalar o dynamoDB-admin:  
    https://www.npmjs.com/package/dynamodb-admin  
